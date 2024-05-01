@@ -81,8 +81,8 @@ def prepare_dataset(folder_path, dataset_prefix):
 #The following functions generates the frequencies and triplets
 #This function might take few minutes for large datasets :)
 if __name__ == "__main__":
-    prepare_dataset("datasets/dblp/", "dblp_authors")
-    prepare_dataset("datasets/dblp/", "dblp_titles")
+    # prepare_dataset("datasets/dblp/", "dblp_authors")
+    # prepare_dataset("datasets/dblp/", "dblp_titles")
     prepare_dataset("datasets/imdb/", "imdb_movie_actors")
     prepare_dataset("datasets/imdb/", "imdb_movie_titles")
-    prepare_dataset("datasets/tpch/", "tpch_part_names")
+    # prepare_dataset("datasets/tpch/", "tpch_part_names")

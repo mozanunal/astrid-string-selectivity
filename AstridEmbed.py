@@ -13,18 +13,17 @@ embedding_learner_configs, frequency_configs, selectivity_learner_configs = None
 
 #This function gives a single place to change all the necessary configurations.
 #Please see misc_utils for some additional descriptions of what these attributes mean
-def setup_configs():
+def setup_configs(query_type, dataset):
     global embedding_learner_configs, frequency_configs, selectivity_learner_configs
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     embedding_learner_configs = misc_utils.AstridEmbedLearnerConfigs(embedding_dimension=64, batch_size=128,
         num_epochs=32, margin=0.2, device=device, lr=0.001, channel_size=8)
 
-    path = "datasets/dblp/"
+    path = "datasets/imdb/"
     #This assumes that prepare_dataset function was called to output the files.
     #If not, please change the file names appropriately
-    file_name_prefix = "dblp_titles"
-    query_type = "prefix"
+    file_name_prefix = dataset
     frequency_configs = misc_utils.StringFrequencyConfigs(
         string_list_file_name= path + file_name_prefix + ".csv",
         selectivity_file_name= path + file_name_prefix +  "_" +  query_type + "_counts.csv",
@@ -100,11 +99,11 @@ def get_selectivity_for_strings(strings, embedding_model, selectivity_model, str
             #By default embedding mode expects a tensor of [batch size x alphabet_size * max_string_length]
             #so create a "fake" dimension that converts the 2D matrix into a 3D tensor
             string_as_tensor = string_as_tensor.view(-1, *string_as_tensor.shape)
-            strings_as_tensors.append(embedding_model(string_as_tensor).numpy())
+            strings_as_tensors.append(embedding_model(string_as_tensor.to("cuda")).to("cpu").numpy())
         strings_as_tensors = np.concatenate(strings_as_tensors)
         #normalized_selectivities= between 0 to 1 after the min-max and log scaling.
         #denormalized_predictions are the frequencies between 0 to N
-        normalized_predictions = selectivity_model(torch.tensor(strings_as_tensors))
+        normalized_predictions = selectivity_model(torch.tensor(strings_as_tensors).to("cuda")).to("cpu")
         denormalized_predictions = misc_utils.unnormalize_torch(normalized_predictions, selectivity_learner_configs.min_val,
             selectivity_learner_configs.max_val)
         return normalized_predictions, denormalized_predictions
@@ -122,12 +121,12 @@ def load_selectivity_estimation_model(model_file_name, string_helper):
     selectivity_model.load_state_dict(torch.load(model_file_name))
     return selectivity_model
 
-def main():
+def main(query_type, dataset):
     random_seed = 1234
     misc_utils.initialize_random_seeds(random_seed)
 
     #Set the configs
-    embedding_learner_configs, frequency_configs, selectivity_learner_configs = setup_configs()
+    embedding_learner_configs, frequency_configs, selectivity_learner_configs = setup_configs(query_type, dataset)
 
     embedding_model_file_name = selectivity_learner_configs.embedding_model_file_name
     selectivity_model_file_name = selectivity_learner_configs.selectivity_model_file_name
@@ -165,4 +164,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main("prefix","imdb_movie_actors")
+    main("suffix","imdb_movie_actors")
+    main("substring","imdb_movie_actors")
+    main("prefix","imdb_movie_titles")
+    main("suffix","imdb_movie_titles")
+    main("substring","imdb_movie_titles")
