@@ -164,9 +164,12 @@ def main(query_type, dataset):
 
 
 if __name__ == "__main__":
-    main("prefix","imdb_movie_actors")
-    main("suffix","imdb_movie_actors")
-    main("substring","imdb_movie_actors")
-    main("prefix","imdb_movie_titles")
-    main("suffix","imdb_movie_titles")
-    main("substring","imdb_movie_titles")
+    # main("prefix","imdb_movie_actors")
+    # main("suffix","imdb_movie_actors")
+    # main("substring","imdb_movie_actors")
+    # main("prefix","imdb_movie_titles")
+    # main("suffix","imdb_movie_titles")
+    # main("substring","imdb_movie_titles")
+    main("prefix","imdb_keywords")
+    main("suffix","imdb_keywords")
+    main("substring","imdb_keywords")

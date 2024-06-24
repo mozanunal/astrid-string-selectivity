@@ -3,6 +3,7 @@ import re
 import pandas as pd
 import summary_data_structures
 
+
 #Matches alphanumeric and space
 regex_pattern = r'[^A-Za-z0-9 ]+'
 
@@ -83,6 +84,10 @@ def prepare_dataset(folder_path, dataset_prefix):
 if __name__ == "__main__":
     # prepare_dataset("datasets/dblp/", "dblp_authors")
     # prepare_dataset("datasets/dblp/", "dblp_titles")
-    prepare_dataset("datasets/imdb/", "imdb_movie_actors")
-    prepare_dataset("datasets/imdb/", "imdb_movie_titles")
+    # prepare_dataset("datasets/imdb/", "imdb_movie_actors")
+    # prepare_dataset("datasets/imdb/", "imdb_movie_titles")
+    #prepare_dataset("datasets/imdb/", "imdb_keywords")
+    prepare_dataset("datasets/imdb/", "imdb_aka_names")
+    prepare_dataset("datasets/imdb/", "imdb_company_names")
+    prepare_dataset("datasets/imdb/", "imdb_movie_company_notes")
     # prepare_dataset("datasets/tpch/", "tpch_part_names")
