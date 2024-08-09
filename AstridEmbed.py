@@ -170,6 +170,16 @@ if __name__ == "__main__":
     # main("prefix","imdb_movie_titles")
     # main("suffix","imdb_movie_titles")
     # main("substring","imdb_movie_titles")
-    main("prefix","imdb_keywords")
-    main("suffix","imdb_keywords")
-    main("substring","imdb_keywords")
+    cols = [
+        "an.name",
+        "cn.name",
+        "k.keyword",
+        "mc.note",
+        "n.name",
+        "t.title",
+    ]
+    for column in cols:
+        for sub_str_type in ["prefix", "suffix", "substring"]:
+            print(f"----------- {column}-{sub_str_type}")
+            main(sub_str_type, column)
+
